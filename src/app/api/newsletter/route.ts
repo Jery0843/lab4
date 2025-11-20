@@ -12,8 +12,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Get user's IP address using free API
-    const ip_address = await getUserIP();
+    // Get user's IP address from request headers
+    const ip_address = getUserIP(request);
 
     const newsletterDB = new NewsletterDB();
     await newsletterDB.createTableIfNotExists();
