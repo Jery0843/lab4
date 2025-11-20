@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { NewsletterDB } from '@/lib/newsletter-db';
 import { emailService } from '@/lib/email-service';
+import { getUserIP } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,6 +12,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Get user's IP address using free API
+    const ip_address = await getUserIP();
+
     const newsletterDB = new NewsletterDB();
     await newsletterDB.createTableIfNotExists();
 
@@ -19,7 +23,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Email already subscribed' }, { status: 409 });
     }
 
-    const added = await newsletterDB.addSubscriber({ name, email, country });
+    const added = await newsletterDB.addSubscriber({ name, email, country, ip_address });
     if (!added) {
       return NextResponse.json({ success: false, error: 'Failed to add subscriber' }, { status: 500 });
     }
