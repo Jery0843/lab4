@@ -627,6 +627,19 @@ CREATE INDEX IF NOT EXISTS idx_otp_email ON otp_verification(email);
 CREATE INDEX IF NOT EXISTS idx_writeup_logs_machine ON writeup_access_logs(machine_id);
 CREATE INDEX IF NOT EXISTS idx_writeup_logs_email ON writeup_access_logs(email);
 
+-- Newsletter subscribers table
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    country TEXT NOT NULL,
+    ip_address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_newsletter_email ON newsletter_subscribers(email);
+CREATE INDEX IF NOT EXISTS idx_newsletter_created ON newsletter_subscribers(created_at);
+
 -- Indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_cache_key ON cache_data(cache_key);
 CREATE INDEX IF NOT EXISTS idx_cache_expires ON cache_data(expires_at);
