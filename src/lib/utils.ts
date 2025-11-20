@@ -22,14 +22,14 @@ export function parseTags(tags: string[] | string | null | undefined): string[] 
 }
 
 /**
- * Gets the user's IP address using a free API service.
+ * Gets the user's IP address using ip-api.com service.
  * @returns Promise<string> The user's IP address
  */
 export async function getUserIP(): Promise<string> {
   try {
-    const response = await fetch('https://api.ipify.org?format=json');
+    const response = await fetch('http://ip-api.com/json/');
     const data = await response.json();
-    return data.ip || 'unknown';
+    return data.query || 'unknown';
   } catch (error) {
     console.error('Failed to get IP:', error);
     return 'unknown';
