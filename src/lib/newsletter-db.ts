@@ -5,6 +5,7 @@ export interface NewsletterSubscriber {
   name: string;
   email: string;
   country: string;
+  ip_address?: string;
   created_at?: string;
 }
 
@@ -25,6 +26,7 @@ export class NewsletterDB {
         name TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
         country TEXT NOT NULL,
+        ip_address TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `;
@@ -36,11 +38,11 @@ export class NewsletterDB {
       throw new Error('Database not available');
     }
     const sql = `
-      INSERT INTO newsletter_subscribers (name, email, country)
-      VALUES (?, ?, ?)
+      INSERT INTO newsletter_subscribers (name, email, country, ip_address)
+      VALUES (?, ?, ?, ?)
     `;
     try {
-      const result = await this.db.query(sql, [subscriber.name, subscriber.email, subscriber.country]);
+      const result = await this.db.query(sql, [subscriber.name, subscriber.email, subscriber.country, subscriber.ip_address]);
       return result.success !== false;
     } catch (error) {
       console.error('Error adding subscriber:', error);
