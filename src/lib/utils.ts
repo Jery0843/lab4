@@ -22,16 +22,10 @@ export function parseTags(tags: string[] | string | null | undefined): string[] 
 }
 
 /**
- * Gets the user's IP address using ip-api.com service.
- * @returns Promise<string> The user's IP address
+ * Gets the user's IP address from request headers.
+ * @param request The NextRequest object
+ * @returns The user's IP address
  */
-export async function getUserIP(): Promise<string> {
-  try {
-    const response = await fetch('http://ip-api.com/json/');
-    const data = await response.json();
-    return data.query || 'unknown';
-  } catch (error) {
-    console.error('Failed to get IP:', error);
-    return 'unknown';
-  }
+export function getUserIP(request: Request): string {
+  return request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 }
