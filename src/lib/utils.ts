@@ -20,3 +20,18 @@ export function parseTags(tags: string[] | string | null | undefined): string[] 
   }
   return [];
 }
+
+/**
+ * Gets the user's IP address using a free API service.
+ * @returns Promise<string> The user's IP address
+ */
+export async function getUserIP(): Promise<string> {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip || 'unknown';
+  } catch (error) {
+    console.error('Failed to get IP:', error);
+    return 'unknown';
+  }
+}
